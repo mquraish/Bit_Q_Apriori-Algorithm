@@ -72,7 +72,7 @@ m=1;
    
    %% 
  k=2;
- while k<4
+ while numel(L{k-1})>1
     p=0; 
     Ck=[];
     for i=1:numel(L{k-1})
@@ -82,16 +82,17 @@ m=1;
                  C{k}{p}=0;
              else
              C{k}{p}=(bitand(bin2dec(L{k-1}(j)), bin2dec(L{k-1}(i))));
-             
+             CB{k}{p}=(bitor(bin2dec(P{k-1}(j)), bin2dec(P{k-1}(i))));
              end
          end 
      end
      Ck = unique(cell2mat(C{k}));
-     
+     CBk = unique(cell2mat(CB{k}));
      m=1;
      for r=1:length(Ck)
          if OneCount(dec2bin(Ck(r),n))>=count
              L{k}{m}=dec2bin(Ck(r),n);
+             P{k}{m}=dec2bin(CBk(r),7);
              m=m+1;
          end
      end
