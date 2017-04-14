@@ -10,6 +10,10 @@ n=10;  %number of transactions
 blood_sugar = xlsread('Bit_Q.xlsx', 'C2:C11')';
 [~, blood_type] = xlsread('Bit_Q.xlsx', 'D2:D11');
 
+data=cell(1,3);
+data{1}=gender;
+data{2}=blood_sugar;
+data{3}=blood_type;
 
 %find out the transactions where certain attributes occured
 k_man=find(contains(gender,'Man'));
@@ -41,7 +45,7 @@ Bb = {'0100000';'1000000';'0001000';'0010000';'0011000';'0000001';'0000010';'000
 %calculate the binary bits of the attribute
 
 % Create Items Set
-    count=2;
+    count=4;
 % 1st Level Frequent Patterns
     
     for i=1:numel(Bs)
@@ -50,13 +54,12 @@ Bb = {'0100000';'1000000';'0001000';'0010000';'0011000';'0000001';'0000010';'000
     m=1;
     for i=1:numel(Count)
         if Count(i)>=count
-        L{1}{m} = Bs{i};  % generate 1 frequent bitset
-        P{1}{m} = Bb{i};  % generate 1 frequent binary bits
+        L{1}(m) = [L{1}(m) Bs(i)];  % generate 1 frequent bitset
+        P{1}(m) = [P{1}(m) Bb(i)];  % generate 1 frequent binary bits
         m=m+1;
         end
     end
-  %{
- 
+   %{
 m=1;
     for i=1:numel(L{1}) 
         for j=1:numel(L{1}) 
@@ -66,37 +69,35 @@ m=1;
         L{2}{1}=(unique(L{2}{1}));
     end
    L{2}(1,:);
-  
- %}
-    
+  %} 
+ 
    
    %% 
  k=2;
- while k<4
+ %while k<4
     p=0; 
-    Ck=[];
     for i=1:numel(L{k-1})
          for j=1:numel(L{k-1})
              p=p+1;
              if i==j
                  C{k}{p}=0;
              else
-             C{k}{p}=(bitand(bin2dec(L{k-1}(j)), bin2dec(L{k-1}(i))));
-             
+             C{k}{p}=char(bitand(bin2dec(L{k-1}(j)), bin2dec(L{k-1}(i))));
+            
              end
          end 
      end
-     Ck = unique(cell2mat(C{k}));
+     
      
      m=1;
-     for r=1:length(Ck)
-         if OneCount(dec2bin(Ck(r),n))>=count
-             L{k}{m}=dec2bin(Ck(r),n);
+     for r=1:numel(C{k})
+         if OneCount(char(C{k}{r}))>=count
+             L{k}{m}=char(C{k}{r});
              m=m+1;
          end
      end
      k=k+1;
- end 
+ %end 
  
     
 
