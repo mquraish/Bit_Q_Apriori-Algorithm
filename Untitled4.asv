@@ -41,7 +41,7 @@ Bb = {'0100000';'1000000';'0001000';'0010000';'0011000';'0000001';'0000010';'000
 %calculate the binary bits of the attribute
 
 % Create Items Set
-    count=4;
+    count=2;
 % 1st Level Frequent Patterns
     
     for i=1:numel(Bs)
@@ -58,7 +58,7 @@ Bb = {'0100000';'1000000';'0001000';'0010000';'0011000';'0000001';'0000010';'000
    
    %% 
  k=2;
- while numel(L{k-1})>1
+ while ~isempty(L{k-1})
     p=0; 
     Ck=[];
     for i=1:numel(L{k-1})
@@ -85,8 +85,10 @@ Bb = {'0100000';'1000000';'0001000';'0010000';'0011000';'0000001';'0000010';'000
              flag=1;
          end      
      end
+     if flag==0
+         L{k}{m}={}
      k=k+1;
  end 
  
- disp(L{k-1});
+ disp(L{k-1})
     
