@@ -41,12 +41,14 @@ Bb = {'0100000';'1000000';'0001000';'0010000';'0011000';'0000001';'0000010';'000
 %calculate the binary bits of the attribute
 
 % Create Items Set
-    count=2;
+    count=1;
 % 1st Level Frequent Patterns
     
     for i=1:numel(Bs)
         Count(i)=OneCount(Bs{i});
     end
+    L{1}=[];
+    P{1}=[];
     m=1;
     for i=1:numel(Count)
         if Count(i)>=count
@@ -56,6 +58,7 @@ Bb = {'0100000';'1000000';'0001000';'0010000';'0011000';'0000001';'0000010';'000
         end
     end    
  k=2;
+ 
  while numel(L{k-1})>1
     p=0; 
     Ck=[];
@@ -72,20 +75,15 @@ Bb = {'0100000';'1000000';'0001000';'0010000';'0011000';'0000001';'0000010';'000
          end 
     end
 
-     Ck = (cell2mat(C{k}));
-     CBk =(cell2mat(CB{k}));
+     Ck = cell2mat(C{k});
+     CBk =cell2mat(CB{k});
      for i=1:length(Ck)
          merged{k}{i,1}=[Ck(i) CBk(i)];
      end
-x1 = cellfun(@(y)y(:)', merged{k}, 'UniformOutput',0);
-x2 = cell2mat(x1);
-x3 = unique(x2,'rows');
-x4 = num2cell(x3,1);
-Ck=x4{1};
-CBk=x4{2};
-
+     
+[Ck CBk]=DeleteDuplicate(merged{k});     
     
- m=1;
+     m=1;
      flag=0;
      for r=1:length(Ck)
          if OneCount(dec2bin(Ck(r),n))>=count
@@ -96,8 +94,11 @@ CBk=x4{2};
          end      
      end
    
+   
+   if flag==0
+      break;
+   end
     k=k+1;
 end 
 disp(L{k-1})
 disp(P{k-1})
-    
